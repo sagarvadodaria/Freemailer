@@ -43,7 +43,7 @@ How to Integrate
     message.To = "to@domain.com";
     message.Subject = "Subject";
     message.Message = "Message Text";
-    CloudQueueMessage mess = new CloudQueueMessage(JsonConvert.SerializeObject(message));
+    CloudQueueMessage mess = new    CloudQueueMessage(JsonConvert.SerializeObject(message));
     queue.AddMessage(mess);
 
 
