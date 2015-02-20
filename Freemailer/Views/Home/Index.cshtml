@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<blockquote>
+    <p class="lead">Freemailer - the mashup of SiteExtesnsions and JobHost (WebJobs SDK). </p>
+    <p> Send emails via WebJob SDK JobHost hosted in this Site Extensions using a MailGun account.</p>
+    <small class="text-success"> Submit email contents into the Queue as below and let Freemailer do the rest for you.</small>
+</blockquote>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">Prerequiste</h3>
+    </div>
+    <div class="panel-body">
+        <p> 1. MailGun account (if you dont have one and want to send free email, just signup for free) </p>
+        <p> 2. Azure Storage Queue with name "<strong>emailqueue,</strong>"  where you will post your email content and details</p>
+    </div>
+</div>
+
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"> How to Integrate </h3>
+    </div>
+    <div class="panel-body">
+        <p>1. Add below keys and connection string in the web.config of your website. You may choose to directly add the below keys using Azure portal via configure tab</p>
+        <pre class="brush: js">
+    &lt;connectionstrings&gt;
+        &lt;add name="AzureWebJobsDashboard" connectionstring="DefaultEndpointsProtocol=https;AccountName=yourStore;AccountKey=yourkey" /&gt;
+        &lt;add name="AzureWebJobsStorage" connectionstring="DefaultEndpointsProtocol=https;AccountName=yourStore;AccountKey=yourKey" /&gt;
+    &lt;/connectionstrings&gt;
+    &lt;appSettings&gt;
+        &lt;add key="apiKey" value="your-mailgun-key-abcd" /&gt;
+        &lt;add key="domain" value="your-mailgun-domain-sandboxabcd.mailgun.org" /&gt;
+    &lt;/appSettings&gt;
+    </pre>
+        <p>2. Create following class which will be used to send email in queue</p>
+        <pre class="brush: js">
+    public class EmailMessage
+    {
+        public string To { get; set; }
+        public string From { get; set; }
+        public string Subject { get; set; }
+        public string Message { get; set; }
+    }
+</pre>
+        <p>3. Use below code to submit email to the queue, basically need to serialize the message using JsonConvert.</p>
+        <pre class="brush: js">
+    CloudQueue queue = queueClient.GetQueueReference("emailqueue");
+    var message = new EmailMessage();
+    message.From = "from@domain.com";
+    message.To = "to@domain.com";
+    message.Subject = "Subject";
+    message.Message = "Message Text";
+    CloudQueueMessage mess = new CloudQueueMessage(JsonConvert.SerializeObject(message));
+    queue.AddMessage(mess);
+</pre>
+        <p class="text-success"> Thats it, as soon as the message is submitted to the Queue, the JobHost will pick it up and send emails using your MailGun account</p>
+    </div>
+</div>
+<div class="alert alert-info">
+    In case you want to enhance the functionality, feel free to fork it out at https://github.com/srvking/Freemailer
+</div>
+     
