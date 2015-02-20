@@ -6,16 +6,16 @@ Send emails via WebJob SDK JobHost hosted in this Site Extensions using a MailGu
 —  Submit email contents into the Queue as below and let Freemailer do the rest for you.
 
 
-Prerequiste
+**Prerequiste**
 
 1. MailGun account (if you dont have one and want to send free email, just signup for free) 
 
 2. Azure Storage Queue with name "emailqueue," where you will post your email content and details
 
 
-How to Integrate 
+**How to Integrate**
 
-1. Add below keys and connection string in the web.config of your website. You may choose to directly add the below keys using Azure portal via configure tab
+1 Add below keys and connection string in the web.config of your website. You may choose to directly add the below keys using Azure portal via configure tab
 ```
     <connectionstrings>
         <add name="AzureWebJobsDashboard" connectionstring="DefaultEndpointsProtocol=https;AccountName=yourStore;AccountKey=yourkey" />
@@ -27,7 +27,7 @@ How to Integrate
     </appSettings>
  ```   
 
-2. Create following class which will be used to send email in queue
+2 Create following class which will be used to send email in queue
 ```
    ` public class EmailMessage
     {
@@ -38,7 +38,7 @@ How to Integrate
     }`
 ```
 
-3. Use below code to submit email to the queue, basically need to serialize the message using JsonConvert.
+3 Use below code to submit email to the queue, basically need to serialize the message using JsonConvert.
 ```
     CloudQueue queue = queueClient.GetQueueReference("emailqueue");
     var message = new EmailMessage();
