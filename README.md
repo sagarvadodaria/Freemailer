@@ -27,13 +27,13 @@ How to Integrate
     
 
 2. Create following class which will be used to send email in queue
-    public class EmailMessage
+   ` public class EmailMessage
     {
         public string To { get; set; }
         public string From { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }
-    }
+    }`
 
 
 3. Use below code to submit email to the queue, basically need to serialize the message using JsonConvert.
