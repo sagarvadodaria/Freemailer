@@ -16,6 +16,7 @@ Prerequiste
 How to Integrate 
 
 1. Add below keys and connection string in the web.config of your website. You may choose to directly add the below keys using Azure portal via configure tab
+```
     <connectionstrings>
         <add name="AzureWebJobsDashboard" connectionstring="DefaultEndpointsProtocol=https;AccountName=yourStore;AccountKey=yourkey" />
         <add name="AzureWebJobsStorage" connectionstring="DefaultEndpointsProtocol=https;AccountName=yourStore;AccountKey=yourKey" />
@@ -24,9 +25,10 @@ How to Integrate
         <add key="apiKey" value="your-mailgun-key-abcd" />
         <add key="domain" value="your-mailgun-domain-sandboxabcd.mailgun.org" />
     </appSettings>
-    
+ ```   
 
 2. Create following class which will be used to send email in queue
+```
    ` public class EmailMessage
     {
         public string To { get; set; }
@@ -34,9 +36,10 @@ How to Integrate
         public string Subject { get; set; }
         public string Message { get; set; }
     }`
-
+```
 
 3. Use below code to submit email to the queue, basically need to serialize the message using JsonConvert.
+```
     CloudQueue queue = queueClient.GetQueueReference("emailqueue");
     var message = new EmailMessage();
     message.From = "from@domain.com";
@@ -45,6 +48,6 @@ How to Integrate
     message.Message = "Message Text";
     CloudQueueMessage mess = new    CloudQueueMessage(JsonConvert.SerializeObject(message));
     queue.AddMessage(mess);
-
+```
 
 Thats it, as soon as the message is submitted to the Queue, the JobHost will pick it up and send emails using your MailGun account
